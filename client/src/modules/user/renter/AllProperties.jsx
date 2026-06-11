@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../../components/Navbar';
+import Footer from '../../../components/Footer';
 import axios from 'axios';
 import api from '../../../../api.js';
 
@@ -301,6 +302,7 @@ export default function AllProperties() {
           </div>
         </section>
       )}
+      <Footer />
     </div>
   );
 }

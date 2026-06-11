@@ -1,6 +1,7 @@
 import   { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import axios from 'axios';
 import api from '../../../api.js';
 
@@ -266,11 +267,7 @@ export default function Home() {
       
 
       {/* Premium Footer */}
-      <footer className="bg-slate-950 border-t border-slate-900 py-8 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p>© 2026 RentEase Inc. All rights reserved.</p>
-        </div>
-      </footer>
+       <Footer />
     </div>
   );
 }

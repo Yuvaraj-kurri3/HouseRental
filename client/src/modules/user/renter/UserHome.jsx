@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../../components/Navbar';
+import Footer from '../../../components/Footer';
  
 export default function UserHome() {
   const [searchLocation, setSearchLocation] = useState('');
@@ -35,7 +36,7 @@ export default function UserHome() {
     if (userData.type === 'Owner') {
       navigate('/owner/home');
     } else if (userData.type === 'Renter') {
-      navigate('/renter/home');
+      navigate('/renter/bookings');
     } 
     else if (userData.type === 'Admin') {
       navigate('/admin/home');
@@ -268,53 +269,7 @@ export default function UserHome() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-950 border-t border-slate-800/80 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            {/* Logo */}
-            <div>
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
-                RentEase
-              </h3>
-              <p className="text-slate-400 text-sm">Your trusted platform for finding the perfect rental home.</p>
-            </div>
-
-            {/* Links */}
-            <div>
-              <h4 className="font-semibold mb-4 text-white">Company</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="#" className="hover:text-blue-400 transition">About Us</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition">Careers</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition">Blog</a></li>
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h4 className="font-semibold mb-4 text-white">Support</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="#" className="hover:text-blue-400 transition">Contact</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition">Help Center</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition">Safety</a></li>
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div>
-              <h4 className="font-semibold mb-4 text-white">Legal</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="#" className="hover:text-blue-400 transition">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition">Cookie Policy</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-800/50 pt-8 text-center text-slate-400 text-sm">
-            <p>&copy; 2024 RentEase Inc. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

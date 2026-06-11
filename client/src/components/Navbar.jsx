@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 export default function Navbar( ) {
   const [isOpen, setIsOpen] = useState(false);
   const[token,setToken]=useState();
+  const [user, setUser] = useState(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -13,14 +14,26 @@ useEffect(()=>{
 
   function fetchlogindata(){
     const token=localStorage.getItem('token');
+    const storedUser=localStorage.getItem('user');
     if(token){
       console.log("token from navbar:", token);
-      setToken(token)
+      setToken(token);
+      if(storedUser){
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          console.error("Error parsing user from localStorage:", e);
+        }
+      }
     }else{
-   alert('Login or Register to continue ');
+      // Only alert on private renter/owner routes to avoid annoying guests on landing pages
+      const path = window.location.pathname;
+      if (path.startsWith('/renter') || path.startsWith('/owner')) {
+        alert('Login or Register to continue ');
+      }
     }
   }
-fetchlogindata();
+  fetchlogindata();
 },[]);
 
 const logout=()=>{
@@ -31,7 +44,7 @@ alert("your are logged out! redirecting to login page in 2 secs");
 }
 
   return (
-    <nav className="bg-slate-900 text-white shadow-lg border-b border-slate-800/80">
+    <nav className="bg-slate-900 text-white shadow-lg border-b border-slate-800/80 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -43,28 +56,48 @@ alert("your are logged out! redirecting to login page in 2 secs");
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-           
+            {/* Dynamic Role-Based Links */}
+            {token && user && (
+              <>
+                {user.type === 'Renter' && (
+                  <>
+                    <Link to="/renter/home" className="hover:text-blue-400 text-slate-300 font-medium transition-colors duration-200">
+                      Home
+                    </Link>
+                    <Link to="/renter/all-properties" className="hover:text-blue-400 text-slate-300 font-medium transition-colors duration-200">
+                      Properties
+                    </Link>
+                    <Link to="/renter/bookings" className="hover:text-blue-400 text-slate-300 font-medium transition-colors duration-200">
+                      My Bookings
+                    </Link>
+                  </>
+                )}
+                {user.type === 'Owner' && (
+                  <Link to="/owner/home" className="hover:text-blue-400 text-slate-300 font-medium transition-colors duration-200">
+                    Dashboard
+                  </Link>
+                )}
+              </>
+            )}
 
-    {
-      token ?
-      
-         <Link 
-              to="/auth/login"
-              onClick={logout}
-              className="hover:text-red-400 transition-colors duration-200 font-medium"
-            >
-              Logout
-      </Link> :
-       <Link 
-              to="/auth/login"
-              className="hover:text-blue-400 transition-colors duration-200 font-medium"
-            >
-              Login
-            </Link>
-    }
-           
-
-  
+            {
+              token ?
+              
+                 <Link 
+                      to="/auth/login"
+                      onClick={logout}
+                      className="hover:text-red-400 transition-colors duration-200 font-medium"
+                    >
+                      Logout
+               </Link> :
+               <Link 
+                      to="/auth/login"
+                      className="hover:text-blue-400 transition-colors duration-200 font-medium"
+                    >
+                      Login
+                    </Link>
+            }
+            
 
             <Link 
               to="/auth/register"
@@ -117,39 +150,74 @@ alert("your are logged out! redirecting to login page in 2 secs");
       {/* Mobile Navigation */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-64' : 'max-h-0'
+          isOpen ? 'max-h-96' : 'max-h-0'
         }`}
       >
         <div className="px-2 pt-2 pb-3 space-y-1 bg-slate-800">
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-            }}
-            className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium"
+          <Link
+            to="/"
+            onClick={() => setIsOpen(false)}
+            className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
           >
-            Home
-          </a>
+            Landing Home
+          </Link>
+
+          {/* Mobile Dynamic Role-Based Links */}
+          {token && user && user.type === 'Renter' && (
+            <>
+              <Link
+                to="/renter/home"
+                onClick={() => setIsOpen(false)}
+                className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
+              >
+                Home
+              </Link>
+              <Link
+                to="/renter/all-properties"
+                onClick={() => setIsOpen(false)}
+                className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
+              >
+                Properties
+              </Link>
+              <Link
+                to="/renter/bookings"
+                onClick={() => setIsOpen(false)}
+                className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
+              >
+                My Bookings
+              </Link>
+            </>
+          )}
+
+          {token && user && user.type === 'Owner' && (
+            <Link
+              to="/owner/home"
+              onClick={() => setIsOpen(false)}
+              className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
+            >
+              Dashboard
+            </Link>
+          )}
 
             {
 
               token ? 
               <Link 
               to='/auth/login'
-              onClick={logout}
-              className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium"
+              onClick={() => {
+                logout();
+                setIsOpen(false);
+              }}
+              className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
               >Logout</Link>
               
               : 
               <Link
             to="/auth/login"
-            onClick={(e) => {
-              e.preventDefault();
-           
+            onClick={() => {
               setIsOpen(false);
             }}
-            className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium"
+            className="block px-3 py-2 rounded-md hover:bg-slate-700 transition-colors duration-200 font-medium text-slate-300"
           >
             Login
           </Link>
@@ -160,7 +228,7 @@ alert("your are logged out! redirecting to login page in 2 secs");
             onClick={() => {
                setIsOpen(false);
             }}
-            className="w-full text-left px-3 py-2 rounded-md bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium transition-all duration-200 cursor-pointer"
+            className="w-full text-left block px-3 py-2 rounded-md bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium transition-all duration-200 cursor-pointer"
           >
             Register
           </Link>
