@@ -1,0 +1,3 @@
+1. add jwt token in .env.
+2. change bookingStatus() in OwnerHome page. 
+3. Delete all docments, for one click.
