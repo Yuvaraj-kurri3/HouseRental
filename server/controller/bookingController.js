@@ -16,23 +16,22 @@ export const bookProperty= async(req,res)=>{
             if(!user){
                 return res.status(404).json({message:"User not found"});
             }
-            console.log("user",user);
-            console.log("ownerId",ownerId);
-        // const booking= new BookingModel({
-        //     propertyId,
-        //     ownerId,
-        //     userId:userid,
-        //     tenantName:user.name,
-        //     phoneNumber:user.phoneNumber,
-        //     bookingStatus:"pending"
-        // });
-        // propertyData.availability=false;
-        // await propertyData.save();
-        // await booking.save();
+           
+        const booking= new BookingModel({
+            propertyId,
+            ownerId,
+            userId:userid,
+            tenantName:user.name,
+            phoneNumber:user.phoneNumber,
+            bookingStatus:"pending"
+        });
+        propertyData.availability=false;
+        await propertyData.save();
+        await booking.save();
 
-        // return res.status(200).json({message:"Property booked successfully",booking:booking,property:propertyData, user:user});
+        return res.status(200).json({message:"Property booked successfully",booking:booking,property:propertyData, user:user});
 
-                return res.status(200).json({message:"Property booked successfully", user:user});
+                // return res.status(200).json({message:"Property booked successfully", user:user});
 
     }catch(error){
 
@@ -76,4 +75,29 @@ catch(error){
     return res.status(500).json({message:"Internal server error"}); 
 
 }
+}
+
+export const cancelBooking= async(req,res)=>{
+
+try{
+    const {bookingId}= req.params;
+
+    const bookingData= await BookingModel.findByIdAndDelete(bookingId);
+
+    if(!bookingData){
+        return res.status(404).json({message:"Booking not found"});
+    }
+    const propertyId= bookingData.propertyId;
+    await PropertyModel.findByIdAndUpdate(propertyId,{availability:true});
+
+    return res.status(200).json({message:"Booking canceled successfully"});
+
+
+
+}catch(error)
+{
+    console.error("Error canceling booking:", error);
+return res.status(500).json({message:"Internal server error"});
+}
+
 }
