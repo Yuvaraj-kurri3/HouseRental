@@ -7,6 +7,7 @@ import authRoute from './routes/authRoute.js';
 import ownerRoutes from './routes/ownerRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import propertiesRoute from './routes/propertiesRoute.js';
+import adminRoute from './routes/adminRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -44,6 +45,10 @@ app.use('/api/auth', authRoute);
 app.use('/api/owner', ownerRoutes);
 app.use('/api/booking', bookingRoutes);
 app.use('/api/properties', propertiesRoute);
+app.use('/api/admin',adminRoute);
+
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

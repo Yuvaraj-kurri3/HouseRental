@@ -11,7 +11,7 @@ const generateToken = (user) => {
     return jwt.sign(
         { id: user._id, email: user.email, type: user.type },
         "jwttokensecretkey",// process.env.JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '23h' }
     );
 };
 
@@ -23,15 +23,32 @@ export const registerUser= async(req,res)=>{
             return res.status(400).json({message:"User already exists"});
         }
         const hashedPassword= await bcrypt.hash(password,10);
-        const newUser= new userModel({
+        if(type==="Owner" || type==="owner"){
+
+            const newUser= new userModel({
             name,
             email,
             password:hashedPassword,
             phoneNumber,
-            type
+            type,
+            PermissionStatus:"Ungrant"
         });
-        await newUser.save();
-     return res.status(201).json({message:"User registered successfully"});
+                await newUser.save();
+
+        }
+        else{
+
+            const newUser= new userModel({
+                name,
+                email,
+                password:hashedPassword,
+                phoneNumber,
+                type
+            });
+                    await newUser.save();
+
+        }
+      return res.status(201).json({message:"User registered successfully"});
 
 
     }catch(error){
@@ -45,7 +62,7 @@ export const loginUser= async(req,res)=>{
         const {email,password}=req.body;
         const user= await userModel.findOne({email});
         if(!user){
-            return res.status(400).json({message:"Invalid email or password"});
+            return res.status(404).json({message:"User Not Found"});
         }   
         const isPasswordValid= await bcrypt.compare(password,user.password);
         if(!isPasswordValid){
@@ -58,7 +75,8 @@ export const loginUser= async(req,res)=>{
             name:user.name,
             email:user.email,
             type:user.type,
-            phoneNumber:user.phoneNumber
+            phoneNumber:user.phoneNumber,
+            PermissionStatus:user.PermissionStatus
         }
         return res.status(200).json({message:"Login successful", resUser,token});
 

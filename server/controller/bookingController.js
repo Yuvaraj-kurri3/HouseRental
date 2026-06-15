@@ -56,27 +56,6 @@ export const getUserBookings=async(req,res)=>{
     }
 }
 
-export const changebookingStatus= async(req,res)=>{
-
-try{
-    const {bookingId}= req.params;
-    const {bookingStatus}= req.body;
-
-    const BookingData= await BookingModel.findByIdAndUpdate(bookingId,{bookingStatus: bookingStatus || "confirmed"},{new: true});
-
-    if(!BookingData){
-        return res.status(404).json({message:"Booking not found"});
-    }
-    return res.status(200).json({message:"Booking status updated successfully",booking:BookingData});
-}
-catch(error){
-
-    console.error("Error changing booking status:", error);
-    return res.status(500).json({message:"Internal server error"}); 
-
-}
-}
-
 export const cancelBooking= async(req,res)=>{
 
 try{

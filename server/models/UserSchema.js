@@ -25,7 +25,14 @@ phoneNumber:{
 type:{
     type:String,
     required:[true,"Please enter your user type"],
-}
+},
+PermissionStatus:{
+    type:String,
+    required:[true,"Permission mandatory"],
+    enum:["NA","Granted","Ungrant"],
+    default:"NA"
+    }
+
 },{
     strict:false
 

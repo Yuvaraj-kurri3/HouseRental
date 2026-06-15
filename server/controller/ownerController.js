@@ -1,5 +1,6 @@
 import PropertyModel from '../models/PropertySchema.js'
 import BookingModel from '../models/BookingSchema.js';
+import userModel from '../models/UserSchema.js'
 
 export const newProperty = async (req,res)=>{
    try {
@@ -147,5 +148,37 @@ export const getOwnerBookings= async(req,res)=>{
             success:false,
             error:error
         })
+    }
+}
+
+export const changebookingStatus= async(req,res)=>{
+
+try{
+    const {bookingId}= req.params;
+    const {bookingStatus}= req.body;
+
+    const BookingData= await BookingModel.findByIdAndUpdate(bookingId,{bookingStatus: bookingStatus},{new: true});
+
+    if(!BookingData){
+        return res.status(404).json({message:"Booking not found"});
+    }
+    return res.status(200).json({message:"Booking status updated successfully",booking:BookingData});
+}
+catch(error){
+
+    console.error("Error changing booking status:", error);
+    return res.status(500).json({message:"Internal server error"}); 
+
+}
+}
+
+export const getMyDetails =async(req,res)=>{
+    const {ownerId}=req.params;
+    try {
+        const owner= await userModel.findOne({_id:ownerId},{password:0})
+        return res.status(200).json({message:"Owner Details Fetched", owner});
+    } catch (error) {
+       console.error("Error while fetching OwnerDetails", error); 
+       return res.status(200).json({message:"Error While Fetching Owner Details"});
     }
 }
