@@ -35,7 +35,12 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeFilter, setActiveFilter] = useState('All');
   const [Allproperties, setAllProperties] = useState([]);
+  const[permissionStatus, setPermissionStatus]=useState(null);
   const token = localStorage.getItem('token');
+  const userStr = localStorage.getItem('user');
+  const user = JSON.parse(userStr);
+
+  
 
  
 
@@ -52,14 +57,49 @@ export default function Home() {
       try {
 
         const response = await axios.get(`${api}/api/properties/properties/all`);
-        console.log("Fetched properties:", response.data.properties);
-        setAllProperties(response.data.properties);
+          setAllProperties(response.data.properties);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
     }
     fetchAllProperties();
   },[]);
+
+  // OwnerDetails
+useEffect(()=>{
+  const fetchOwnerDetails=async()=>{
+    const response= await axios.get(`${api}/api/owner/ownerDetails/${user._id}`);
+    console.log(response.data.owner.PermissionStatus);
+    setPermissionStatus(response.data.owner.PermissionStatus);
+  }
+
+  fetchOwnerDetails();
+},[]);
+
+  const redirect= ()=>{
+               if (userStr) {
+                try {
+                  console.log("User data from localStorage:", user);
+                  if(user && user.type==="Owner"){
+                    window.location.href = '/owner/home';
+
+                  }
+                    else if (user && user.type === 'Renter') {
+                    window.location.href = '/renter/home';
+                   }
+                  else if (user && user.type === 'Admin') {
+                    window.location.href = '/admin/home';
+                  }else {
+                    alert("Please log in as an Owner to access the dashboard.");
+                  }
+                } catch (err) {
+                  console.error("Error parsing user data", err);
+                  alert("An error occurred. Please try again.");
+                }
+              } else {
+                alert("Please log in to access the dashboard.");
+              }
+  }
 
   // Filter properties
   const filteredProperties = activeFilter === 'All'
@@ -122,35 +162,24 @@ export default function Home() {
         {/* Section Header */}
     {token && (
     <div className="flex justify-center mb-10">
+
+      {
+       user.type==="Owner" && permissionStatus  === "Ungrant" ? 
           <button
             className="px-6 py-3 rounded-md bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl"
-            onClick={() => {
-              const userStr = localStorage.getItem('user');
-              if (userStr) {
-                try {
-                  const user = JSON.parse(userStr);
-                  console.log("User data from localStorage:", user);
-                  if (user && user.type === 'Owner') {
-                    window.location.href = '/owner/home';
-                  } else if (user && user.type === 'Renter') {
-                    window.location.href = '/renter/home';
-                   }
-                  else if (user && user.type === 'Admin') {
-                    window.location.href = '/admin/home';
-                  }else {
-                    alert("Please log in as an Owner to access the dashboard.");
-                  }
-                } catch (err) {
-                  console.error("Error parsing user data", err);
-                  alert("An error occurred. Please try again.");
-                }
-              } else {
-                alert("Please log in to access the dashboard.");
-              }
-            }}
+            onClick={() => {alert('Wait for Approval')}}
+          >
+            Permission Not Granted
+          </button>
+          :
+           <button
+            className="px-6 py-3 rounded-md bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl"
+            onClick={() => redirect()}
           >
             Go To Your Dashboard
           </button>
+                }
+
         </div>
 
     )}

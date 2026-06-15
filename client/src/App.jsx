@@ -7,6 +7,7 @@ import OwnerHome from './modules/user/owner/OwnerHome.jsx';
 import UserHome from './modules/user/renter/UserHome.jsx';
 import AllProperties from './modules/user/renter/AllProperties.jsx';
 import UserBookings from './modules/user/renter/UserBookings.jsx';
+import AdminHome from './modules/user/admin/adminHome.jsx';
 function App() {
   return (
     <Router>
@@ -19,6 +20,7 @@ function App() {
         <Route path="/renter/home" element={<UserHome />} />
         <Route path="/renter/all-properties" element={<AllProperties />} />
         <Route path="/renter/bookings" element={<UserBookings />} />
+        <Route path="/admin/home" element={<AdminHome />} />
       </Routes>
     </div>
     </Router>

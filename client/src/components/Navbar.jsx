@@ -16,8 +16,7 @@ useEffect(()=>{
     const token=localStorage.getItem('token');
     const storedUser=localStorage.getItem('user');
     if(token){
-      console.log("token from navbar:", token);
-      setToken(token);
+       setToken(token);
       if(storedUser){
         try {
           setUser(JSON.parse(storedUser));
