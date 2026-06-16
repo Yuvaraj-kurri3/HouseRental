@@ -58,6 +58,7 @@ export default function Home() {
 
         const response = await axios.get(`${api}/api/properties/properties/all`);
           setAllProperties(response.data.properties);
+          console.log("Properties:",response.data);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -68,13 +69,16 @@ export default function Home() {
   // OwnerDetails
 useEffect(()=>{
   const fetchOwnerDetails=async()=>{
-    const response= await axios.get(`${api}/api/owner/ownerDetails/${user._id}`);
-    console.log(response.data.owner.PermissionStatus);
-    setPermissionStatus(response.data.owner.PermissionStatus);
+    if(user){
+
+      const response= await axios.get(`${api}/api/owner/ownerDetails/${user._id}`);
+      console.log(response.data.owner.PermissionStatus);
+      setPermissionStatus(response.data.owner.PermissionStatus);
+    }
   }
 
   fetchOwnerDetails();
-},[]);
+},[user]);
 
   const redirect= ()=>{
                if (userStr) {
@@ -227,7 +231,7 @@ useEffect(()=>{
                 {/* Property Image Container */}
                 <div className="relative h-56 md:h-64 overflow-hidden w-full">
                   <img
-                    src={property.propertyImages[0]}
+                    src={property.propertyImages}
                     alt={'img'}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />

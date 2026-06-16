@@ -5,6 +5,7 @@ export default function Navbar( ) {
   const [isOpen, setIsOpen] = useState(false);
   const[token,setToken]=useState();
   const [user, setUser] = useState(null);
+  const [userType, setUserType]=useState('');
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -15,11 +16,12 @@ useEffect(()=>{
   function fetchlogindata(){
     const token=localStorage.getItem('token');
     const storedUser=localStorage.getItem('user');
-    if(token){
+     if(token){
        setToken(token);
       if(storedUser){
         try {
           setUser(JSON.parse(storedUser));
+          setUserType(JSON.parse(storedUser).type);
         } catch (e) {
           console.error("Error parsing user from localStorage:", e);
         }
@@ -49,10 +51,10 @@ alert("your are logged out! redirecting to login page in 2 secs");
           {/* Logo */}
           <div className="flex-shrink-0 cursor-pointer flex items-center"  >
             <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              RentEase
+              HouseHub
             </Link>
+            <small className='gap-2 ml-2'> {userType} </small>
           </div>
-
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {/* Dynamic Role-Based Links */}

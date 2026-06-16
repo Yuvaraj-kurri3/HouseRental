@@ -10,7 +10,7 @@ export default function Footer() {
           {/* Brand & Motto */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              RentEase
+              HouseHub
             </h3>
             <p className="text-slate-400 text-sm leading-relaxed">
               Your trusted platform for finding, renting, and managing properties with ease and confidence.
@@ -73,7 +73,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-800/50 pt-8 text-center text-slate-400 text-sm">
-          <p>&copy; {currentYear} RentEase Inc. All rights reserved.</p>
+          <p>&copy; {currentYear} HouseHub Inc. All rights reserved.</p>
         </div>
       </div>
     </footer>

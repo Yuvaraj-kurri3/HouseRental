@@ -249,7 +249,7 @@ export default function UserHome() {
         <div className="relative max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Find Your Dream Home?</h2>
           <p className="text-lg text-slate-300 mb-8">
-            Join thousands of happy renters and property owners on RentEase. Start your journey today!
+            Join thousands of happy renters and property owners on HouseHub. Start your journey today!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

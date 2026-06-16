@@ -96,7 +96,7 @@ export default function Register() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-white selection:bg-indigo-500 selection:text-white">
       {/* Top Navbar */}
-        <title>Register - RentHub</title>
+        <title>Register - HouseHub</title>
 
 
       {/* Main Content Area */}

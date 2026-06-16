@@ -92,7 +92,7 @@ useEffect(()=>{
     <div className="min-h-screen flex flex-col bg-slate-950 text-white selection:bg-indigo-500 selection:text-white">
       {/* Top Navbar */}
       {/* <Navbar /> */}
-    <title>Login - RentHub</title>
+    <title>Login - HouseHub</title>
 
       {/* Main Content Area */}
       <div className="flex-1 flex items-center justify-center px-4 py-12 md:py-16 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
@@ -190,7 +190,6 @@ useEffect(()=>{
                 className="w-full px-4 py-3 rounded-lg bg-slate-800/40 border border-slate-700/50 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/60 focus:border-transparent transition-all duration-200 text-sm"
               />
             </div>
-
             {/* Submit Button */}
             <button
               type="submit"

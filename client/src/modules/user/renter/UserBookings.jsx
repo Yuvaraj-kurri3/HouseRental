@@ -172,7 +172,7 @@ export default function UserBookings() {
   return (
     <div className="min-h-screen bg-[#080d19] text-white flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
       <Navbar />
-      <title>My Bookings - RentEase</title>
+      <title>My Bookings - HouseHub</title>
 
       {/* Background radial gradients for rich aesthetics */}
       <div className="absolute top-16 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl pointer-events-none"></div>
