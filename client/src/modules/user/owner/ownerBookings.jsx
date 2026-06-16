@@ -22,8 +22,7 @@ useEffect(()=>{
 
  const fetchBookings= async()=>{
      try {
-        console.log(user);
-      const response= await axios.get(`${api}/api/booking/owner-bookings/${user._id}`,{
+       const response= await axios.get(`${api}/api/booking/owner-bookings/${user._id}`,{
         headers:{
           Authorization:`Bearer ${token}`
         }

@@ -57,8 +57,7 @@ const changePermission= async(userId, PermissionStatus)=>{
   const response= await axios.put(`${api}/api/admin/user/updatePermissionStatus`,{userId, PermissionStatus})
  
   if(response.status===200) window.location.reload();
-  console.log(`Userid:${userId}, Permission To Change:${PermissionStatus}`);
-}
+ }
   if (!user) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">

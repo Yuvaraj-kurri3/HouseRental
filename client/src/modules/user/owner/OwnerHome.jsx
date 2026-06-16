@@ -40,8 +40,7 @@ export default function OwnerHome() {
      const Orginaluser=localStorage.getItem('user');
       const token= localStorage.getItem("token");
       const user= JSON.parse(Orginaluser)
-
-      console.log("User:",user.name);
+ 
 if(! token || !user) return window.location.href="/auth/login";
 
       setUser(user);
@@ -175,8 +174,7 @@ if(! token || !user) return window.location.href="/auth/login";
         imageUrls = await uploadImages(files);
       }
 
-      console.log("Form Data:", formData);
-      console.log("ImageURl:", imageUrls[0]);
+ 
 
       // // Step 2: Create property with uploaded image URLs
       const response = await axios.post(

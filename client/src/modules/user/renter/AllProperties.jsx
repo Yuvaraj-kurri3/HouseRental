@@ -78,7 +78,7 @@ export default function AllProperties() {
       console.log("Booking response:", response.data);
       alert(response.data.message);
 
-      setTimeout(() => {window.location.reload();}, 1500);
+      setTimeout(() => {window.location.reload();}, 500);
       // Optionally, navigate to a booking confirmation page or refresh the properties list
 
     }catch(error){
@@ -154,7 +154,7 @@ export default function AllProperties() {
                   {/* Image Container */}
                   <div className="relative overflow-hidden h-48 md:h-56 bg-slate-700">
                     <img
-                      src={property.propertyImages[0]}
+                      src={property.propertyImages}
                       alt={property.propertyType}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                     />

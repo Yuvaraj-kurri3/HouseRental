@@ -26,7 +26,7 @@ const getAllProperties=async()=>{
             Authorization:`Bearer ${token}`
           }
         });
-    console.log(response.data)
+    
     setAllproperties(response.data.properties);
   } catch (error) {
     console.error(error.message);
