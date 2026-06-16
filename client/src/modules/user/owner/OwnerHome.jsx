@@ -19,11 +19,14 @@ export default function OwnerHome() {
     ownerContact: '',
     propertyAmount: 0,
     availability: true,
-    propertyImages:'',
+    propertyImages:[],
     additionalDetails: '',
   });
 
- 
+  // Image Upload State
+  const [imagePreviews, setImagePreviews] = useState([]);
+  // const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
+  const [selectedFileNames, setSelectedFileNames] = useState('No files chosen');
 
   // Status Alerts State
   const [status, setStatus] = useState({
@@ -34,9 +37,11 @@ export default function OwnerHome() {
 // all properties to display in homePage
   useEffect(()=>{
     const intialization=()=>{
-     const user=localStorage.getItem('user');
+     const Orginaluser=localStorage.getItem('user');
       const token= localStorage.getItem("token");
+      const user= JSON.parse(Orginaluser)
 
+      console.log("User:",user.name);
 if(! token || !user) return window.location.href="/auth/login";
 
       setUser(user);
@@ -46,6 +51,67 @@ if(! token || !user) return window.location.href="/auth/login";
   },[])
 
 
+
+  // Handle Image Change
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    
+    if (!file) {
+      setSelectedFileNames('No file chosen');
+      setImagePreviews([]);
+      return;
+    }
+
+    // Update file name display
+    setSelectedFileNames(file.name);
+
+    // Create image preview
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImagePreviews([event.target.result]);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Remove image preview
+  const removeImagePreview = () => {
+    setImagePreviews([]);
+    setSelectedFileNames('No file chosen');
+    // Reset file input
+    const fileInput = document.querySelector('#file-upload');
+    if (fileInput) fileInput.value = '';
+  };
+
+  // Upload images to backend
+  const uploadImages = async (files) => {
+    try {
+      const formDataToSend = new FormData();
+      files.forEach(file => {
+        formDataToSend.append('images', file);
+      });
+
+      const response = await axios.post(
+        `${api}/api/owner/upload`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // setUploadedImageUrls(response.data.imageUrls);
+        return response.data.imageUrls;
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      throw error;
+    }
+  };
 
   // Handle inputs
   const handleChange = (e) => {
@@ -70,7 +136,6 @@ if(! token || !user) return window.location.href="/auth/login";
       propertyAddress,
       ownerContact,
       propertyAmount,
-      propertyImages,
       additionalDetails,
       availability
     } = formData;
@@ -88,10 +153,10 @@ if(! token || !user) return window.location.href="/auth/login";
       setStatus({ type: 'error', message: 'Property amount must be greater than 0.' });
       return;
     }
-    // if (propertyImages.length === 0) {
-    //   setStatus({ type: 'error', message: 'Please upload at least one property image.' });
-    //   return;
-    // }
+    if (imagePreviews.length === 0) {
+      setStatus({ type: 'error', message: 'Please upload a property image.' });
+      return;
+    }
     if (!additionalDetails.trim()) {
       setStatus({ type: 'error', message: 'Additional details for the property are required.' });
       return;
@@ -101,6 +166,19 @@ if(! token || !user) return window.location.href="/auth/login";
     setStatus({ type: '', message: '' });
 
     try {
+      // Step 1: Upload images first
+      const fileInput = document.querySelector('#file-upload');
+      const files = Array.from(fileInput.files || []);
+      
+      let imageUrls = [];
+      if (files.length > 0) {
+        imageUrls = await uploadImages(files);
+      }
+
+      console.log("Form Data:", formData);
+      console.log("ImageURl:", imageUrls[0]);
+
+      // // Step 2: Create property with uploaded image URLs
       const response = await axios.post(
         `${api}/api/owner/newProperty`,
         {
@@ -111,7 +189,7 @@ if(! token || !user) return window.location.href="/auth/login";
           propertyAddress,
           ownerContact,
           propertyAmount,
-          propertyImages,
+          propertyImages: imageUrls[0],
           availability,
           additionalDetails,
         },
@@ -135,25 +213,31 @@ if(! token || !user) return window.location.href="/auth/login";
           propertyAddress: '',
           ownerContact: '',
           propertyAmount: 0,
-          propertyImages: '',
+          propertyImages:'',
           additionalDetails: '',
           availability: true,
         });
-        // setSelectedFileNames('No file chosen');
+        setImagePreviews([]);
+        // setUploadedImageUrls([]);
+        setSelectedFileNames('No files chosen');
+        
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
         setStatus({
           type: 'error',
-          message: response.data.message || 'Failed to create property.',
+          // message: response.data.message || 'Failed to create property.',
+                    message: 'Failed to create property.',
+
         });
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Submit property error:', error);
       setStatus({
         type: 'error',
-        message: error.response?.data?.message || 'Server connection error. Please try again.',
+        message: error.response?.data?.message || error.message || 'Server connection error. Please try again.',
       });
     } finally {
       setLoading(false);
@@ -299,37 +383,6 @@ if(! token || !user) return window.location.href="/auth/login";
                     />
                   </div>
 
-                  {/* Property Images File Upload Component */}
-                  <div className="flex flex-col">
-                    <label className="text-slate-300 font-semibold text-sm mb-2">
-                      Property Images
-                    </label>
-                    <div className="flex items-center w-full bg-[#182035] border border-slate-800 rounded-lg py-1 px-2.5 relative">
-                      <input
-                        type="text"
-                        name='propertyImages'
-                        value={formData.propertyImages}
-                        onChange={handleChange}
-                        placeholder='enter img'
-                        className="w-full bg-[#182035] border border-slate-800 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-sm"
-                        // multiple
-                        // accept="image/*"
-                        // onChange={handleImageChange}
-                        // id="file-upload"
-                        // className="sr-only"
-                      />
-                      {/* <label
-                        htmlFor="file-upload"
-                        className="bg-[#5969f6] hover:bg-[#4958df] text-white font-semibold text-xs py-2.5 px-4 rounded-md cursor-pointer transition-all duration-200 shadow-md active:scale-95"
-                      >
-                        Choose Files
-                      </label>
-                      <span className="text-slate-400 text-xs ml-3 truncate max-w-[150px]">
-                        {selectedFileNames}
-                      </span> */}
-                    </div>
-                  </div>
-
                   {/* Owner Contact Number */}
                   <div className="flex flex-col">
                     <label className="text-slate-300 font-semibold text-sm mb-2">
@@ -360,9 +413,9 @@ if(! token || !user) return window.location.href="/auth/login";
                     />
                   </div>
 
-               <div className="flex flex-col">
+                  <div className="flex flex-col">
                     <label className="text-slate-300 font-semibold text-sm mb-2">
-                     Availability
+                      Availability
                     </label>
                     <div className="relative">
                       <select
@@ -381,6 +434,49 @@ if(! token || !user) return window.location.href="/auth/login";
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Property Images File Upload Component - Full Width */}
+                <div className="flex flex-col">
+                  <label className="text-slate-300 font-semibold text-sm mb-2">
+                    Property Images
+                  </label>
+                  <div className="flex items-center w-full bg-[#182035] border border-slate-800 rounded-lg py-1 px-2.5 relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      id="file-upload"
+                      className="sr-only"
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="bg-[#5969f6] hover:bg-[#4958df] text-white font-semibold text-xs py-2.5 px-4 rounded-md cursor-pointer transition-all duration-200 shadow-md active:scale-95"
+                    >
+                      Choose File
+                    </label>
+                    <span className="text-slate-400 text-xs ml-3 truncate max-w-[150px]">
+                      {selectedFileNames}
+                    </span>
+                  </div>
+
+                  {/* Image Preview */}
+                  {imagePreviews.length > 0 && (
+                    <div className="mt-4 relative w-32 h-32">
+                      <img
+                        src={imagePreviews[0]}
+                        alt="Property Preview"
+                        className="w-full h-full object-cover rounded-lg border border-slate-700 hover:border-indigo-500 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImagePreview}
+                        className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center transition-all"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Additional Details (Full Width) */}
