@@ -35,7 +35,7 @@ const PropertyModel= mongoose.Schema({
     },
     
     propertyImages:{
-    type:[String],
+    type:String,
     required:[true,"Please enter the property images"]
     },
 
