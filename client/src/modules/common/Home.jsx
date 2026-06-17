@@ -43,11 +43,10 @@ export default function Home() {
     const init=async()=>{
       if(!token || !user){
         alert("please Login to access your dashboard");
-        window.location.href='/auth/login';
-      }
+return;      }
     }
     init();
-  });
+  },[token]);
 
   // Carousel Autoplay effect (cycles every 5 seconds)
   useEffect(() => {
