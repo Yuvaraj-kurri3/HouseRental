@@ -359,7 +359,7 @@ export default function UserBookings() {
                         const property = booking.propertyId || {};
                         const owner = booking.ownerId || {};
                         const hasImages = property.propertyImages && property.propertyImages.length > 0;
-                        const mainImage = hasImages ? property.propertyImages[0] : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=400&q=80";
+                        const mainImage = hasImages ? property.propertyImages : "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=400&q=80";
                         const status = (booking.bookingStatus || 'pending').toLowerCase();
                         
                         return (
