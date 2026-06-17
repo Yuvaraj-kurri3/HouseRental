@@ -39,8 +39,7 @@ export default function UserBookings() {
           Authorization: `Bearer ${userToken}`
         }
       });
-      console.log("Fetched User Bookings:", response.data.bookings);
-      setBookings(response.data.bookings || []);
+       setBookings(response.data.bookings || []);
     } catch (error) {
       console.error("Error fetching bookings:", error);
       // Fallback/Placeholder message handled gracefully

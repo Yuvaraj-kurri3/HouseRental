@@ -9,8 +9,17 @@ export default function AdminAllProperties() {
   // Properties List State with Sample Data
      const [Allproperties, setAllproperties] = useState([]);
      const[token,setToken]=useState();
+     const user=localStorage.getItem('user')
 
- 
+   useEffect(()=>{
+    const init=async()=>{
+      if(!token || !user){
+        alert("please Login to access your dashboard");
+        window.location.href='/auth/login';
+      }
+    }
+    init();
+  });
 useEffect(()=>{
 
 const getAllProperties=async()=>{

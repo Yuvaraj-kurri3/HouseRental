@@ -6,15 +6,6 @@ export default function OwnerProperties() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState('');
  
-  // Selected files count or name state for UI display
-  // const [selectedFileNames, setSelectedFileNames] = useState('No file chosen');
-
-  // Status Alerts State
-//   const [status, setStatus] = useState({
-//     type: '', // 'success' | 'error' | ''
-//     message: '',
-//   });
- 
   // Properties List State with Sample Data
   const [properties, setProperties] = useState([]);
  //fetching bookings for owner

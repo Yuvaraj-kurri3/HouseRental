@@ -9,7 +9,16 @@ export default function AdminAllBookings() {
   // Properties List State with Sample Data
      const [Bookingproperties, setBookingProperties] = useState([]);
      const token=localStorage.getItem('token');
-
+      const user=localStorage.getItem('user');
+        useEffect(()=>{
+    const init=async()=>{
+      if(!token || !user){
+        alert("please Login to access your dashboard");
+        window.location.href='/auth/login';
+      }
+    }
+    init();
+  });
 
     useEffect(()=>{
 

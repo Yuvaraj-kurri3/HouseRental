@@ -19,6 +19,7 @@ export default function AdminHome() {
       const user=localStorage.getItem('user');
       if(!user ||  !token){
           window.location.href='/auth/login';
+          return;
       }
 
       setToken(token);
@@ -54,7 +55,11 @@ const deleteUser= async(UserId)=>{
 
 const changePermission= async(userId, PermissionStatus)=>{
  
-  const response= await axios.put(`${api}/api/admin/user/updatePermissionStatus`,{userId, PermissionStatus})
+  const response= await axios.put(`${api}/api/admin/user/updatePermissionStatus`,{userId, PermissionStatus},{
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  })
  
   if(response.status===200) window.location.reload();
  }

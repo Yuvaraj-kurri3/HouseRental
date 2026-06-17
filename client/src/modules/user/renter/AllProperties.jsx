@@ -22,7 +22,8 @@ export default function AllProperties() {
   const [allProperties, setAllProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState( []);
   const navigate = useNavigate();
-
+const token=localStorage.getItem('token');
+const user=localStorage.getItem('user');
   // Handle filter change
   useEffect(() => {
     const setType = () => {
@@ -37,13 +38,26 @@ export default function AllProperties() {
     setType();
   }, [ selectedType, allProperties]);
 
+
+  useEffect(()=>{
+    const init=async()=>{
+      if(!token || !user){
+        alert("please Login to access your dashboard");
+        window.location.href='/auth/login';
+      }
+    }
+    init();
+  });
 // Fetch all properties from backend on component mount
     useEffect(()=>{
     const fetchAllProperties= async()=>{
       try {
-        const response = await axios.get(`${api}/api/properties/properties/all`);
-        console.log("Fetched properties:", response.data.properties);
-        setAllProperties(response.data.properties);
+        const response = await axios.get(`${api}/api/properties/properties/all`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
+         setAllProperties(response.data.properties);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
@@ -73,10 +87,13 @@ export default function AllProperties() {
     
 
     try{
-      const response = await axios.post(`${api}/api/booking/properties/book/${property._id}/${user._id}`);
+      const response = await axios.post(`${api}/api/booking/properties/book/${property._id}/${user._id}`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
      
-      console.log("Booking response:", response.data);
-      alert(response.data.message);
+       alert(response.data.message);
 
       setTimeout(() => {window.location.reload();}, 500);
       // Optionally, navigate to a booking confirmation page or refresh the properties list

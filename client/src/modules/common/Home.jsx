@@ -39,10 +39,15 @@ export default function Home() {
   const token = localStorage.getItem('token');
   const userStr = localStorage.getItem('user');
   const user = JSON.parse(userStr);
-
-  
-
- 
+  useEffect(()=>{
+    const init=async()=>{
+      if(!token || !user){
+        alert("please Login to access your dashboard");
+        window.location.href='/auth/login';
+      }
+    }
+    init();
+  });
 
   // Carousel Autoplay effect (cycles every 5 seconds)
   useEffect(() => {
@@ -56,10 +61,14 @@ export default function Home() {
     const fetchAllProperties= async()=>{
       try {
 
-        const response = await axios.get(`${api}/api/properties/properties/all`);
+        const response = await axios.get(`${api}/api/properties/properties/all`,{
+          headers:{
+            Authorization:  `Bearer ${token}`
+          }
+        });
           setAllProperties(response.data.properties);
-          console.log("Properties:",response.data);
-      } catch (error) {
+
+        } catch (error) {
         console.error("Error fetching properties:", error);
       }
     }
@@ -71,9 +80,12 @@ useEffect(()=>{
   const fetchOwnerDetails=async()=>{
     if(user){
 
-      const response= await axios.get(`${api}/api/owner/ownerDetails/${user._id}`);
-      console.log(response.data.owner.PermissionStatus);
-      setPermissionStatus(response.data.owner.PermissionStatus);
+      const response= await axios.get(`${api}/api/owner/ownerDetails/${user._id}`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+       setPermissionStatus(response.data.owner.PermissionStatus);
     }
   }
 

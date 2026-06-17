@@ -17,6 +17,10 @@ useEffect(()=>{
           const token = localStorage.getItem('token');
       const userString = localStorage.getItem('user');
       const user = JSON.parse(userString); // Parse the user object
+      if(!token || !user){
+        alert('login to access your details');
+        return window.location.href='/auth/login';
+      }
       setToken(token);
       setUser(user);
 
@@ -62,9 +66,13 @@ useEffect(()=>{
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("Booking status updated:", response.data);
-        alert("Booking status updated successfully");
-        window.location.reload();
+         if(response.status===200) {
+
+           alert("Booking status updated successfully");
+          window.location.reload();
+
+         }
+ 
     }
     catch(error){
       console.error("Error updating booking status:", error);
