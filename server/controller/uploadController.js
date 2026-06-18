@@ -37,8 +37,7 @@ export const uploadPropertyImages = async (req, res) => {
             imageUrls: uploadedUrls,
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
+         res.status(500).json({
             success: false,
             message: 'Error uploading files',
             error: error.message,

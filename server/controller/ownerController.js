@@ -26,8 +26,7 @@ export const newProperty = async (req,res)=>{
         property
     })
    } catch (error) {
-    console.log(error);
-   return res.status(500).json({
+    return res.status(500).json({
         message:"Error in creating property",
         success:false,
         error:error 
@@ -45,8 +44,7 @@ export const getOwnerProperties = async (req,res)=>{
              properties
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
+         res.status(500).json({
             message:"Error in fetching properties",
             success:false,
             error:error
@@ -66,8 +64,7 @@ export const deleteProperty= async(req,res)=>{
                  success:true
              })
     }catch(error){
-        console.log(error);
-        res.status(500).json({
+         res.status(500).json({
             message:"Error in deleting property",
             success:false,
             error:error
@@ -80,8 +77,7 @@ export const updatePropertyDetails= async(req,res)=>{
     try{
         const {propertyId}= req.params;
         const editFormData= req.body;
-        console.log("Received edit data:", editFormData);
-        const updatedProperty= await PropertyModel.findByIdAndUpdate(propertyId,editFormData,{new:true});
+         const updatedProperty= await PropertyModel.findByIdAndUpdate(propertyId,editFormData,{new:true});
         if(!updatedProperty){
             return res.status(404).json({
                 message:"Property not found",
@@ -95,8 +91,7 @@ export const updatePropertyDetails= async(req,res)=>{
         })
     }
     catch(error){
-        console.log(error);
-        res.status(500).json({
+         res.status(500).json({
             message:"Error in updating property details",
             success:false,
             error:error
@@ -123,8 +118,7 @@ export const registerBooking= async(req,res)=>{
         })
 
     }catch(error){
-        console.log(error);
-        res.status(500).json({
+         res.status(500).json({
             message:"Error in registering booking",
             success:false,
             error:error
@@ -142,8 +136,7 @@ export const getOwnerBookings= async(req,res)=>{
             bookings
         })
     } catch(error){
-        console.log(error);
-        res.status(500).json({
+         res.status(500).json({
             message:"Error in fetching bookings",
             success:false,
             error:error

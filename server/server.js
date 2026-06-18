@@ -45,7 +45,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/owner', ownerRoutes);
 app.use('/api/booking', bookingRoutes);
 app.use('/api/properties', propertiesRoute);
-app.use('/api/admin',adminRoute);
+app.use('/api/admin', adminRoute);
 
 
 

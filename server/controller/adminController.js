@@ -42,8 +42,7 @@ return res.status(400).json({message:"Error Fetching Bookings", error})
 export const updatePermissionStatus= async(req,res)=>{
     try {
         const {userId, PermissionStatus}=req.body;
-        console.log(userId, PermissionStatus);
-       const upatedData= await userModel.findByIdAndUpdate({_id:userId}, 
+        const upatedData= await userModel.findByIdAndUpdate({_id:userId}, 
         
         {$set:{PermissionStatus:PermissionStatus}}, {new:true},{password:1});
 
@@ -61,8 +60,7 @@ export const deleteUser= async(req,res)=>{
 
     try{
         const {userId}=req.params;
-        console.log("UserId:", userId);
-        
+         
         // Delete from userModel
         var existinguser= await userModel.findById(userId);
         if(existinguser) {

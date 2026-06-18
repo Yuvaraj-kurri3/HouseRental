@@ -1,16 +1,17 @@
 import userModel from '../models/UserSchema.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import dotenv from 'dotenv'
+import path from 'path';
+import { fileURLToPath } from 'url';
+dotenv.config({ path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../.env') });
 
-dotenv.config();
-
-console.log("JWT Secret from .env:", process.env.JWT_SECRET);
-
+ 
+ 
 const generateToken = (user) => {
     return jwt.sign(
         { id: user._id, email: user.email, type: user.type },
-        "jwttokensecretkey",// process.env.JWT_SECRET,
+        process.env.JWT_SECRET,
         { expiresIn: '23h' }
     );
 };
