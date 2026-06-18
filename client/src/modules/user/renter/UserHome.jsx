@@ -4,23 +4,8 @@ import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
  
 export default function UserHome() {
-  const [searchLocation, setSearchLocation] = useState('');
-  const [propertyType, setPropertyType] = useState('All Types');
-  const [budget, setBudget] = useState('Any Price');
   const navigate = useNavigate();
-
-
-
-
-  const handleSearch = () => {
-    // Navigate to properties page with filters
-    const query = new URLSearchParams({
-      location: searchLocation,
-      type: propertyType,
-      budget: budget,
-    }).toString();
-    navigate(`/properties?${query}`);
-  };
+ 
 
   const handleMyBookings = () => {
     const token = localStorage.getItem('token');
@@ -126,79 +111,7 @@ export default function UserHome() {
         </div>
       </section>
 
-      {/* Search Section */}
-      <section className="relative z-10 -mt-8 md:-mt-16 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-slate-800/70 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl p-6 md:p-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Search Your Ideal Home</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {/* Location Input */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">Location</label>
-                <div className="relative">
-                  <svg className="absolute left-3 top-3 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Where do you want to live?"
-                    value={searchLocation}
-                    onChange={(e) => setSearchLocation(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                  />
-                </div>
-              </div>
-
-              {/* Property Type Dropdown */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">Property Type</label>
-                <select
-                  value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
-                >
-                  <option>All Types</option>
-                  <option>Residential</option>
-                  <option>Villa</option>
-                  <option>Apartment</option>
-                  <option>House</option>
-                  <option>Penthouse</option>
-                </select>
-              </div>
-
-              {/* Budget Dropdown */}
-              <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">Budget</label>
-                <select
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                  className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
-                >
-                  <option>Any Price</option>
-                  <option>Under $1,000</option>
-                  <option>$1,000 - $2,000</option>
-                  <option>$2,000 - $3,000</option>
-                  <option>$3,000 - $5,000</option>
-                  <option>Above $5,000</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <button
-              onClick={handleSearch}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 md:py-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 transform flex items-center justify-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-              </svg>
-              Search
-            </button>
-          </div>
-        </div>
-      </section>
+     
 
       {/* Stats Section */}
       <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-slate-800/30">

@@ -94,8 +94,7 @@ useEffect(()=>{
   const redirect= ()=>{
                if (userStr) {
                 try {
-                  console.log("User data from localStorage:", user);
-                  if(user && user.type==="Owner"){
+                   if(user && user.type==="Owner"){
                     window.location.href = '/owner/home';
 
                   }

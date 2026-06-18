@@ -8,8 +8,8 @@ export default function AdminAllProperties() {
 
   // Properties List State with Sample Data
      const [Allproperties, setAllproperties] = useState([]);
-     const[token,setToken]=useState();
-     const user=localStorage.getItem('user')
+      const user=localStorage.getItem('user')
+      const token=localStorage.getItem('token');
 
    useEffect(()=>{
     const init=async()=>{
@@ -17,20 +17,16 @@ export default function AdminAllProperties() {
         alert("please Login to access your dashboard");
         window.location.href='/auth/login';
       }
-    }
+     }
     init();
   });
+
+
+
 useEffect(()=>{
-
 const getAllProperties=async()=>{
-
-
-     const token=localStorage.getItem('token');
-    if(!token) return window.location.href='/auth/login';
-    setToken(token);
-
   try {
-    const response =await axios.get(`${api}/api/admin/properties/getAllProperties`,{
+     const response =await axios.get(`${api}/api/admin/properties/getAllProperties`,{
           headers:{
             Authorization:`Bearer ${token}`
           }

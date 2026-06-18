@@ -5,7 +5,7 @@ import Footer from '../../../components/Footer';
 import axios from 'axios';
 import api from '../../../../api.js';
 
- 
+
 
 const propertyTypeOptions = [
   'All Properties',
@@ -20,50 +20,50 @@ const propertyTypeOptions = [
 export default function AllProperties() {
   const [selectedType, setSelectedType] = useState('All Properties');
   const [allProperties, setAllProperties] = useState([]);
-  const [filteredProperties, setFilteredProperties] = useState( []);
+  const [filteredProperties, setFilteredProperties] = useState([]);
   const navigate = useNavigate();
-const token=localStorage.getItem('token');
-const user=localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
   // Handle filter change
   useEffect(() => {
     const setType = () => {
-           if (selectedType === 'All Properties') {
-      setFilteredProperties(allProperties);
-    } else {
-      setFilteredProperties(
-        allProperties.filter((prop) => prop.propertyType === selectedType)
-      );
-    }
+      if (selectedType === 'All Properties') {
+        setFilteredProperties(allProperties);
+      } else {
+        setFilteredProperties(
+          allProperties.filter((prop) => prop.propertyType === selectedType)
+        );
+      }
     }
     setType();
-  }, [ selectedType, allProperties]);
+  }, [selectedType, allProperties]);
 
-
-  useEffect(()=>{
-    const init=async()=>{
-      if(!token || !user){
+// login verifcation
+  useEffect(() => {
+    const init = async () => {
+      if (!token || !user) {
         alert("please Login to access your dashboard");
-        window.location.href='/auth/login';
+        window.location.href = '/auth/login';
       }
     }
     init();
   });
-// Fetch all properties from backend on component mount
-    useEffect(()=>{
-    const fetchAllProperties= async()=>{
+  // Fetch all properties from backend on component mount
+  useEffect(() => {
+    const fetchAllProperties = async () => {
       try {
         const response = await axios.get(`${api}/api/properties/properties/all`,{
-          headers:{
+          headers: {
             Authorization: `Bearer ${token}`
           }
         });
-         setAllProperties(response.data.properties);
+        setAllProperties(response.data.properties);
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
     }
     fetchAllProperties();
-  },[]);
+  }, []);
 
   // Format currency
   const formatCurrency = (amount) => {
@@ -75,39 +75,38 @@ const user=localStorage.getItem('user');
   };
 
   // Handle book/buy button click
-  const handleActionClick = async(property) => {
-    const token = localStorage.getItem('token');
+  const handleActionClick = async (property) => {
     if (!token) {
       alert('Please login to proceed with booking');
       navigate('/auth/login');
       return;
     }
-    const user = JSON.parse(localStorage.getItem('user'));
+    const userr = JSON.parse(user);
     // TODO: Navigate to booking/purchase page
     
 
-    try{
-      const response = await axios.post(`${api}/api/booking/properties/book/${property._id}/${user._id}`,{
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        });
-     
-       alert(response.data.message);
+    try {
+      const response = await axios.post(`${api}/api/booking/properties/book/${property._id}/${userr._id}`, {},{
+        headers: {
+          authorization: `Brear ${token}`
+        }
+      });
 
-      setTimeout(() => {window.location.reload();}, 500);
+      alert(response.data.message);
+
+      setTimeout(() => { window.location.reload(); }, 500);
       // Optionally, navigate to a booking confirmation page or refresh the properties list
 
-    }catch(error){
+    } catch (error) {
       console.error("Error during booking/purchase:", error);
-      alert('An error occurred. Please try again later.');
+      alert('An error occurred. Please try again later.:',error.message);
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <Navbar />
-    <title>All Properties - RentHub</title>
+      <title>All Properties - RentHub</title>
 
       {/* Header Section */}
       <section className="relative overflow-hidden pt-8 pb-12 md:pt-12 md:pb-16 px-4 sm:px-6 lg:px-8">
@@ -185,11 +184,10 @@ const user=localStorage.getItem('user');
 
                       {/* Ad Type Badge */}
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          property.propertyAdType === 'Rent'
-                            ? 'bg-gradient-to-r from-purple-500 to-purple-600'
-                            : 'bg-gradient-to-r from-amber-500 to-amber-600'
-                        }`}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${property.propertyAdType === 'Rent'
+                          ? 'bg-gradient-to-r from-purple-500 to-purple-600'
+                          : 'bg-gradient-to-r from-amber-500 to-amber-600'
+                          }`}
                       >
                         {property.propertyAdType}
                       </span>
@@ -198,11 +196,10 @@ const user=localStorage.getItem('user');
                     {/* Availability Badge */}
                     <div className="absolute top-4 right-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          property.availability
-                            ? 'bg-emerald-500/90 text-white'
-                            : 'bg-red-500/90 text-white'
-                        }`}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${property.availability
+                          ? 'bg-emerald-500/90 text-white'
+                          : 'bg-red-500/90 text-white'
+                          }`}
                       >
                         {property.availability ? 'Available' : 'Not Available'}
                       </span>
@@ -261,19 +258,18 @@ const user=localStorage.getItem('user');
                     <button
                       onClick={() => handleActionClick(property)}
                       disabled={!property.availability}
-                      className={`w-full py-2.5 px-4 rounded-lg font-bold transition-all duration-200 transform hover:scale-105 ${
-                        property.availability
-                          ? property.propertyAdType === 'Rent'
-                            ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-blue-500/50 text-white'
-                            : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-lg hover:shadow-amber-500/50 text-white'
-                          : 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-50'
-                      }`}
+                      className={`w-full py-2.5 px-4 rounded-lg font-bold transition-all duration-200 transform hover:scale-105 ${property.availability
+                        ? property.propertyAdType === 'Rent'
+                          ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-blue-500/50 text-white'
+                          : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-lg hover:shadow-amber-500/50 text-white'
+                        : 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-50'
+                        }`}
                     >
                       {!property.availability
                         ? 'Not Available'
                         : property.propertyAdType === 'Rent'
-                        ? 'Book Now'
-                        : 'Buy Now'}
+                          ? 'Book Now'
+                          : 'Buy Now'}
                     </button>
                   </div>
                 </div>

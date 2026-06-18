@@ -32,8 +32,7 @@ export default function UserBookings() {
   // Fetch Bookings from API
   const fetchUserBookings = async (userId, userToken) => {
     setLoading(true);
-    console.log(userId);
-    try {
+     try {
       const response = await axios.get(`${api}/api/booking/user-bookings/${userId}`, {
         headers: {
           Authorization: `Bearer ${userToken}`
@@ -125,14 +124,13 @@ export default function UserBookings() {
     if (!bookingToCancel) return;
     setActionLoading(true);
     try {
-      const response = await axios.delete(`${api}/api/booking/bookings/cancelbooking/${bookingToCancel._id}`, {
+      const response = await axios.delete(`${api}/api/booking/bookings/cancelbooking/${bookingToCancel._id}`,{
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
-      console.log("Cancellation response:", response.data);
-      
+       
       // Update local state directly to reflect cancellation without hard reloading
       setBookings(prevBookings => 
         prevBookings.map(b => 
@@ -558,7 +556,7 @@ export default function UserBookings() {
             {bookingToCancel && (
               <div className="bg-[#080d19] border border-slate-800 rounded-xl p-4 mb-6 text-sm flex gap-3 items-center">
                 <img
-                  src={bookingToCancel.propertyId?.propertyImages?.[0] || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=150&q=80"}
+                  src={bookingToCancel.propertyId?.propertyImages || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=150&q=80"}
                   alt="Property"
                   className="w-14 h-14 object-cover rounded-lg border border-slate-800 shrink-0"
                 />

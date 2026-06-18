@@ -89,8 +89,7 @@ export default function OwnerProperties() {
       additionalDetails: property.additionalDetails,
       availability:property.availability
     });
-    console.log('223-', property.availability);
-    setShowEditModal(true);
+     setShowEditModal(true);
   };
 
   // Close Edit Modal

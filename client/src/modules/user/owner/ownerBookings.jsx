@@ -31,8 +31,7 @@ useEffect(()=>{
           Authorization:`Bearer ${token}`
         }
       });
-      console.log("Fetched Bookings:60",response.data.bookings);
-
+ 
       // Transform the bookings data to match the UI structure
       const transformedBookings = response.data.bookings.map(booking => ({
         bookingid: booking._id,
@@ -55,8 +54,7 @@ useEffect(()=>{
  
 
   const handleBookingStatusChange= async(propertyId, newStatus)=>{
-    console.log("Booking ID:", propertyId, "New Status:", newStatus);
-
+ 
     try{
 
         const response= await axios.put(`${api}/api/owner/bookings/status/${propertyId}`,{
